@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+             <!-- 手書きcss, <head>の中に以下のcssを入れる -->
+   <link rel="stylesheet" th:href=@{/css/todo_css.css} />
     <title>登録完了</title>
 </head>
 <body>
@@ -22,7 +24,7 @@
             [[*{name}]]
         </p>
         <p>
-            <a th:href=@{/admin/register}>続けて登録</a><br />
+            <a th:href=@{/admin/register}>続けて登録</a><br /><br>
             <a th:href=@{/}>初めに戻る</a><br />
         </p>
     </div>

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,8 +53,17 @@ public class ToDoController {
     * @param model
     * @return
     */
-   @GetMapping("/login")
-   String checkLogin(@RequestParam String mid, Model model) {
+   @PostMapping("/login")
+   String checkLogin(@Validated @ModelAttribute(name = "LoginForm")LoginForm form, BindingResult bindingResult, @RequestParam String mid, Model model) {
+         // 入力チェックに引っかかった場合、ログイン画面に戻る。
+         if (bindingResult.hasErrors()) {
+            // GETリクエスト用のメソッドを呼び出して、ログイン画面に戻る
+            return  "index";
+        } 
+
+        mService.getMember(mid);
+
+
         return ("redirect:" + mid + "/todos/");
    }
 
@@ -65,7 +76,14 @@ public class ToDoController {
     * @return
     */
    @PostMapping("/{mid}/register")
-    String checkRegister(ToDoForm form, @PathVariable String mid, RedirectAttributes r, Model model) {
+    String checkRegister(@Validated @ModelAttribute(name = "ToDoForm")ToDoForm form, @PathVariable String mid, BindingResult bindingResult, Model model) {
+
+        // 入力チェックに引っかかった場合、ユーザー登録画面に戻る
+        if (bindingResult.hasErrors()) {
+            // GETリクエスト用のメソッドを呼び出して、ユーザー登録画面に戻る
+            return  ("redirect:/" + mid + "/todos");
+        }
+
         tService.createToDo(mid, form);
         //r.addFlashAttribute("mid", mid);  // モデル消えるから引数としてこれあげたいけど今回URLからとれるやつやからいらん。RequestParam取りたいときには使うこと
         return ("redirect:/" + mid + "/todos");
