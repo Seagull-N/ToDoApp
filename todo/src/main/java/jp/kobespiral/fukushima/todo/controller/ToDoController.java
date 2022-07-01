@@ -17,12 +17,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jp.kobespiral.fukushima.todo.dto.LoginForm;
 import jp.kobespiral.fukushima.todo.dto.ToDoForm;
 import jp.kobespiral.fukushima.todo.entity.ToDo;
+import jp.kobespiral.fukushima.todo.service.MemberService;
 import jp.kobespiral.fukushima.todo.service.ToDoService;
 
 @Controller
 public class ToDoController {
    @Autowired
    ToDoService tService;
+
+   @Autowired
+   MemberService mService;
+
 
    /**
     * ログインページ
@@ -107,7 +112,7 @@ public class ToDoController {
     String doDone(@PathVariable String mid, @PathVariable long seq,Model model) {
         tService.doDone(seq);
         model.addAttribute("mid", mid);
-        
+
         return ("redirect:/" + mid + "/todos");
     }
 }
