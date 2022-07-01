@@ -93,4 +93,31 @@ public class ToDoService {
     public List<ToDo> getDoneList() {
         return tRepo.findByDone(true);
     }
+
+    /**
+     * TODOを削除する
+     * 
+     * @param seq
+     */
+    public void deleteToDo(long seq) {
+        ToDo t = tRepo.findById(seq).orElseThrow(
+            () -> new ToDoAppException(ToDoAppException.NO_SUCH_MEMBER_EXISTS, seq + ": No such member exists"));
+        
+        tRepo.delete(t);
+
+        return;
+    }
+
+    /**
+     * TODOのタイトルを変更する
+     * 
+     * @return
+     */
+    public ToDo updateToDo(long seq, ToDoForm form) {
+        ToDo t  = tRepo.findById(seq).orElseThrow(
+            () -> new ToDoAppException(ToDoAppException.NO_SUCH_MEMBER_EXISTS, seq + ": No such member exists"));
+        
+        t.setTitle(form.getTitle()); 
+        return tRepo.save(t);
+    }
 }
